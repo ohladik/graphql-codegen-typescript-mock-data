@@ -79,7 +79,7 @@ const getNamedType = (
                         throw `foundType is unknown: ${foundType.name}: ${foundType.type}`;
                 }
             }
-            return `${toMockName(name)}()`;
+            return `${toMockName(name)}(mockCount)`;
     }
 };
 
@@ -103,7 +103,9 @@ const generateMockValue = (
 const getMockString = (typeName: string, fields: string, addTypename = false) => {
     const typename = addTypename ? `\n        __typename: '${typeName}',` : '';
     return `
-export const ${toMockName(typeName)} = (overrides?: Partial<${typeName}>): ${typeName} => {
+export const ${toMockName(typeName)} = (mockCount?: number, overrides?: Partial<${typeName}>): ${typeName} => {
+    if (mockCount && mockCount > 50) return null;
+
     return {${typename}
 ${fields}
         ...overrides
