@@ -106,6 +106,8 @@ const getMockString = (typeName: string, fields: string, addTypename = false) =>
 export const ${toMockName(typeName)} = (mockCount?: number, overrides?: Partial<${typeName}>): ${typeName} => {
     if (mockCount && mockCount > 50) return null;
 
+    mockCount++;
+
     return {${typename}
 ${fields}
         ...overrides
