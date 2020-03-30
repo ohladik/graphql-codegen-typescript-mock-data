@@ -56,6 +56,14 @@ const getNamedType = (
             return casual.integer(0, 9999);
         case 'Date':
             return `'${new Date(casual.unix_time).toISOString()}'`;
+        case 'DateTime':
+            return `'${new Date(casual.unix_time).toISOString()}'`;
+        case 'Json':
+            return `'${casual.word}'`;
+        case 'Upload':
+            return `'${casual.word}'`;
+        case 'IntString':
+            return `'${casual.word}'`;
         default:
             const foundType = types.find(enumType => enumType.name === name);
             if (foundType) {
