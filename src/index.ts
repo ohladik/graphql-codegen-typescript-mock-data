@@ -79,7 +79,7 @@ const getNamedType = (
                         throw `foundType is unknown: ${foundType.name}: ${foundType.type}`;
                 }
             }
-            return `${toMockName(name)}(mockCount)`;
+            return `${toMockName(name)}(null, depth)`;
     }
 };
 
@@ -103,10 +103,10 @@ const generateMockValue = (
 const getMockString = (typeName: string, fields: string, addTypename = false) => {
     const typename = addTypename ? `\n        __typename: '${typeName}',` : '';
     return `
-export const ${toMockName(typeName)} = (mockCount?: number, overrides?: Partial<${typeName}>): ${typeName} => {
-    if (mockCount && mockCount > 50) return null;
+export const ${toMockName(typeName)} = (overrides?: Partial<${typeName}> | null, depth: number = 0): ${typeName} => {
+    if (depth === 5) return null;
 
-    mockCount++;
+    depth++;
 
     return {${typename}
 ${fields}
@@ -222,6 +222,7 @@ export const plugin: PluginFunction<TypescriptMocksPluginConfig> = (schema, docu
     const mockFns = definitions.map(({ mockFn }: any) => mockFn).filter((mockFn: Function) => !!mockFn);
     const typesFileImport = typesFile
         ? `/* eslint-disable @typescript-eslint/no-use-before-define,@typescript-eslint/no-unused-vars */
+           // @ts-ignore
 import { ${typeImports.join(', ')} } from '${typesFile}';\n`
         : '';
 
