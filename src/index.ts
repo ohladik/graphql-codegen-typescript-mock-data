@@ -103,7 +103,7 @@ const generateMockValue = (
 const getMockString = (typeName: string, fields: string, addTypename = false) => {
     const typename = addTypename ? `\n        __typename: '${typeName}',` : '';
     return `
-export const ${toMockName(typeName)} = (overrides?: Partial<${typeName}> | null, depth: number = 0): ${typeName} => {
+export const ${toMockName(typeName)} = (overrides?: Partial<${typeName}> | null, depth: number = 0): ${typeName} | null => {
     if (depth === 5) return null;
 
     depth++;
